@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+    <title>SimpleNet</title>
+
+    <script>
+
+var Input = [];
+var Hidden = [];
+var Output = [];
+
+var Wh = [];
+var Wo = [];
+var Xh = [];
+var Xo = [];
+
+var input_data = [0, 1, 0, 1];
+
+function reset () {
+    Input = [0, 0, 0, 0];
+    Hidden = [0, 0, 0, 0];
+    Output = [0, 0];
+
+    Wh = [[0.5, 0.5, 0.5, 0.5],
+        [0.5, 0.5, 0.5, 0.5],
+        [0.5, 0.5, 0.5, 0.5],
+        [0.5, 0.5, 0.5, 0.5]];
+    Wo = [[0.5, 0.5, 0.5, 0.5],
+        [0.5, 0.5, 0.5, 0.5]];
+    }
+
+function sigmoid (x) {
+     return 1 / (1 + Math.pow(Math.E, -1 * x));
+    }
+
+function propagate (d) {
+// write data into input layer
+    for (var i = 0; i < Input.length; i++) {
+        Input[i] = d[i];
+        }
+
+
+// propagate hidden layer
+Xh = [0, 0, 0, 0];
+for (var j = 0; j < Hidden.length; j++) {
+    for (var i = 0; i < Input.length; i++)    {
+        Xh[j] += Wh[j][i] * Input[i];
+        }
+    }
+
+    // apply sigmoid function
+    for (var j = 0; j < Hidden.length; j++) {
+        Hidden[j] = sigmoid(Xh[j]);
+        }
+
+    // propagate output layer
+    Xo = [0, 0];
+    for (var k = 0; k < Output.length; k++) {
+    for (var j = 0; j < Hidden.length; j++) {
+        Xo[k] += Wo[k][j] * Hidden[j];
+        }
+    }
+
+     // apply sigmoid function
+    for (var k = 0; k < Output.length; k++) {
+    Output[k] = sigmoid(Xo[k]);
+        }
+    }
+function display () {
+document.getElementById('out0').innerHTML = Output[0];
+document.getElementById('out1').innerHTML = Output[1];
+}
+
+
+    </script>
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>0utput 0: </td>
+            <td id="out0"> 0.0</td>
+        </tr>
+        <tr>
+            <td>0utput 1: </td>
+            <td id="out1">0.0</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input type="button" value="Reset" onclick="reset();">
+            </td>
+            <td>
+                <input type="button" value="Propagate" onclick="propagate(input_data); display();">
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
